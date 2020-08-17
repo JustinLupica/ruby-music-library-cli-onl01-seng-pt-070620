@@ -8,11 +8,5 @@ module Concerns::Findable
     find_by_name(name) || create(name)
   end
   
- 
-  
-  
-  
-  
-  
   
 end

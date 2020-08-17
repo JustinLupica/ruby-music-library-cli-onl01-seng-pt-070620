@@ -1,41 +1,36 @@
-class Genre   
-  attr_accessor :name, :songs 
-  
+require 'pry'
+require_relative '../lib/concerns/findable'
+class Genre
+   extend Concerns::Findable
+   
+  attr_accessor :name, :songs
   @@all = []
-
+  
   def initialize(name)
-  @name = name
-  @songs = []
-  save    #saving all instances of the genre created
+    @name = name
+    @songs = []
+    
   end
 
   def self.all
-  @@all
+    @@all 
   end
-
+  
   def self.destroy_all
-  @@all = []
+    self.all.clear
   end
-
+  
   def save
-  @@all << self 
-  end
-
-  # def self.create(genre)
-  # self.new(genre)
-  # end
-  
-  def self.create(name)
-    genre = self.new(name).save
-    self
+    @@all << self
   end
   
-  def songs 
-    @songs
-  end 
+  def self.create(genre)
+    genre = Genre.new(genre)
+    genre.save
+    genre
+  end
   
-
-  
-  
-
-end 
+  def artists
+    songs.collect {|s| s.artist}.uniq
+  end
+end

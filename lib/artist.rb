@@ -1,45 +1,46 @@
-class Artist  
-  attr_accessor :name, :songs 
-  
-  @@all = []
+require 'pry'
+require_relative '../lib/concerns/findable'
 
+class Artist 
+  extend Concerns::Findable
+  
+  attr_accessor :name, :songs
+    @@all = []
+    
+  
   def initialize(name)
-  @name = name
-  @songs = []
-  save    #saving all instances of the artist created
+    @name = name
+    @songs = []
+    
   end
-
+  
   def self.all
-  @@all
+    @@all
   end
-
+  
   def self.destroy_all
-  @@all = []
+    self.all.clear
   end
-
+  
   def save
-  @@all << self 
+    @@all << self
   end
-
+  
   def self.create(artist)
-  self.new(artist)
+    artist = Artist.new(artist)
+    artist.save
+    artist
   end
   
-  #add_song
-      # assigns the current artist to the song's 'artist' property (song belongs to artist)
-      # does not assign the artist if the song already has an artist
-      # adds the song to the current artist's 'songs' collection
-      # does not add the song to the current artist's collection of songs if it already exists therein
-  
-   def add_song(song)
-    if song.artist == nil 
+  def add_song(song)
+    if !song.artist 
       song.artist = self 
-    end 
-    
-    if !@songs.include?(song)
-      @songs << song 
-    end 
-    
+    end
+       songs.push(song) unless songs.include? (song)
   end
-
+  
+  def genres
+    songs.collect {|s| s.genre}.uniq
+  end  
+  
 end
